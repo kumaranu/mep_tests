@@ -1,3 +1,4 @@
+import glob
 import os
 from ase.io import read
 from pymatgen.io.ase import AseAtomsAdaptor
@@ -70,7 +71,8 @@ def compare_mols(molecule_1, molecule_2) -> bool:
 
 
 def check_graph_iso(ref_dir):
-    for i in range(265):
+    num_directories = len(glob.glob(ref_dir + '/???/'))
+    for i in range(num_directories):
         logdir = os.path.join(ref_dir, f'{i:03}')
         if os.path.exists(logdir):
             reactant_traj_file = os.path.join(logdir, 'reactant_opt.traj')
@@ -100,6 +102,6 @@ def check_graph_iso(ref_dir):
 
 
 if __name__ == '__main__':
-    # ref_dir = '/global/cfs/cdirs/m2834/kumaranu/neb_nn_inputs'
-    ref_dir = '/home/kumaranu/Downloads/neb_nn_inputs'
+    ref_dir = '/global/cfs/cdirs/m2834/kumaranu/neb_nn_inputs'
+    #ref_dir = '/home/kumaranu/Downloads/neb_nn_inputs'
     check_graph_iso(ref_dir)
