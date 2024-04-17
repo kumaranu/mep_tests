@@ -5,6 +5,7 @@ from pymatgen.io.ase import AseAtomsAdaptor
 from pymatgen.analysis.graphs import MoleculeGraph
 from pymatgen.analysis.local_env import OpenBabelNN
 from networkx.algorithms.graph_hashing import weisfeiler_lehman_graph_hash
+from plot2 import gen_energy_profile
 
 
 def add_specie_suffix(graph):
@@ -70,7 +71,10 @@ def compare_mols(molecule_1, molecule_2) -> bool:
     return graph_1_hash == graph_2_hash
 
 
-def check_graph_iso(ref_dir):
+def check_graph_iso(
+        ref_dir,
+        threshold=0.05,
+):
     num_directories = len(glob.glob(ref_dir + '/???/'))
     for i in range(num_directories):
         logdir = os.path.join(ref_dir, f'{i:03}')
@@ -94,7 +98,37 @@ def check_graph_iso(ref_dir):
             traj_pymat_mol2 = AseAtomsAdaptor.get_molecule(pdt_traj_atoms[-1])
             bool_product = compare_mols(traj_pymat_mol1, traj_pymat_mol2)
             if bool_reactant and bool_product:
-                continue
+                geodesic_xyz = os.path.join(
+                    ref_dir,
+                    f'{i:03}',
+                    'geodesic_path.xyz',
+                )
+                if not os.path.exists(geodesic_xyz):
+                    print(f"Geodesic's file could not be found for index {i:03}")
+                    continue
+                neb_path_xyz = os.path.join(
+                    ref_dir,
+                    f'{i:03}',
+                    'optimized_path_aseneb_NEBOptimizer_None.xyz'
+                )
+                if not os.path.exists(neb_path_xyz):
+                    print(f"NEB's final path file could not be found for index {i:03}")
+                    continue
+                ts_xyz = os.path.join(
+                    ref_dir,
+                    f'{i:03}',
+                    'TS.xyz',
+                )
+                if not os.path.exists(ts_xyz):
+                    print(f"TS's file could not be found for index {i:03}")
+                    continue
+                barrier_err = gen_energy_profile(
+                    geodesic_xyz,
+                    neb_path_xyz,
+                    ts_xyz,
+                )
+                if abs(barrier_err) > threshold:
+                    print(f'barrier_err: {barrier_err:.3f} eV for index: {i:03}')
             else:
                 print(f'bool_reactant: {bool_reactant}, bool_product: {bool_product} for index {i:03}')
         else:
@@ -102,8 +136,8 @@ def check_graph_iso(ref_dir):
 
 
 if __name__ == '__main__':
-    # ref_dir = '/global/cfs/cdirs/m2834/kumaranu/neb_nn_inputs'
-    #ref_dir = '/global/cfs/cdirs/m2834/kumaranu/neb_nn_inputs1'
-    ref_dir = '/global/cfs/cdirs/m2834/kumaranu/neb_rgd1_inputs'
+    ref_dir = '/global/cfs/cdirs/m2834/kumaranu/neb_nn_inputs'
+    # ref_dir = '/global/cfs/cdirs/m2834/kumaranu/neb_nn_inputs1'
+    # ref_dir = '/global/cfs/cdirs/m2834/kumaranu/neb_rgd1_inputs'
     # ref_dir = '/home/kumaranu/Downloads/neb_nn_inputs'
     check_graph_iso(ref_dir)

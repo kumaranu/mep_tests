@@ -1,3 +1,5 @@
+import os
+import torch
 from mace.calculators import MACECalculator
 from newtonnet.utils.ase_interface import MLAseCalculator
 from ase import Atoms
@@ -16,15 +18,23 @@ def calc_mace():
 
 
 def calc():
+    use_cuda = torch.cuda.is_available()
+    device = 'cuda' if use_cuda else 'cpu'
     mlcalculator = MLAseCalculator(
         model_path=[
-                    '/global/u2/k/kumaranu/Documents/NewtonNet/example/predict/training_52/models/best_model_state.tar',
+                    os.path.join(
+                        os.path.expanduser("~"),
+                        'Documents/NewtonNet/example/predict/training_52/models/best_model_state.tar'
+                    ),
                     #'/global/home/users/kumaranu/Documents/NewtonNet/example/predict/training_53/models/best_model_state.tar',
                     #'/global/home/users/kumaranu/Documents/NewtonNet/example/predict/training_54/models/best_model_state.tar',
                     #'/global/home/users/kumaranu/Documents/NewtonNet/example/predict/training_55/models/best_model_state.tar',
                    ],    # path to model file, str or list of str
         settings_path=[
-                       '/global/u2/k/kumaranu/Documents/NewtonNet/example/predict/training_52/run_scripts/config0.yml',
+                       os.path.join(
+                           os.path.expanduser("~"),
+                           'Documents/NewtonNet/example/predict/training_52/run_scripts/config0.yml'
+                       ),
                        #'/global/home/users/kumaranu/Documents/NewtonNet/example/predict/training_53/run_scripts/config2.yml',
                        #'/global/home/users/kumaranu/Documents/NewtonNet/example/predict/training_54/run_scripts/config1.yml',
                        #'/global/home/users/kumaranu/Documents/NewtonNet/example/predict/training_55/run_scripts/config3.yml',
@@ -32,8 +42,7 @@ def calc():
         hess_method=None,    # method to calculate hessians. 'autograd', 'fwd_diff', 'cnt_diff', or None (default: 'autograd')
         # hess_precision=1e-5,    # hessian gradient calculation precision for 'fwd_diff' and 'cnt_diff', ignored otherwise (default: None)
         disagreement='std',    # method to calculate disagreement among models. 'std', 'std_outlierremoval', 'range':, 'values', or None (default: 'std')
-        device='cuda'   # 'cpu' or list of cuda
-        #device='cpu'   # 'cpu' or list of cuda
+        device=device
     )
     return mlcalculator
 
