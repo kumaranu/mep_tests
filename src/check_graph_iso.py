@@ -103,6 +103,7 @@ def check_graph_iso(ref_dir):
 
 if __name__ == '__main__':
     # ref_dir = '/global/cfs/cdirs/m2834/kumaranu/neb_nn_inputs'
-    ref_dir = '/global/cfs/cdirs/m2834/kumaranu/neb_nn_inputs1'
+    #ref_dir = '/global/cfs/cdirs/m2834/kumaranu/neb_nn_inputs1'
+    ref_dir = '/global/cfs/cdirs/m2834/kumaranu/neb_rgd1_inputs'
     # ref_dir = '/home/kumaranu/Downloads/neb_nn_inputs'
     check_graph_iso(ref_dir)
