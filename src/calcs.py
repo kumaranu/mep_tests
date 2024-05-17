@@ -1,47 +1,68 @@
 import os
+import yaml
 import torch
 from mace.calculators import MACECalculator
 from newtonnet.utils.ase_interface import MLAseCalculator
-from ase import Atoms
+from typing import Any, Dict
 
 
-def calc_mace():
+def load_config(config_path: str = 'tests/config.yml') -> Dict[str, Any]:
+    """
+    Load the configuration file.
 
-    mlcalculator = MACECalculator(
-        model_paths='/global/home/users/kumaranu/Documents/gpu_jobs/MACE_model.model',
-        #model_paths='/global/home/users/kumaranu/Documents/mep_tests/src/MACE_model_cpu.model',
-        device='cuda',
-        #device='cpu',
+    Parameters
+    ----------
+    config_path : str, optional
+        Path to the configuration file, by default 'config.yml'
+
+    Returns
+    -------
+    Dict[str, Any]
+        Configuration dictionary.
+    """
+    with open(config_path, 'r') as file:
+        config = yaml.safe_load(file)
+    return config
+
+
+def calc_mace() -> MACECalculator:
+    """
+    Initialize and return a MACECalculator instance.
+
+    Returns
+    -------
+    MACECalculator
+        An instance of the MACECalculator initialized with the specified model path and device.
+    """
+    config = load_config()
+    model_path = config['mace']['model_path']
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+
+    ml_calculator = MACECalculator(
+        model_paths=model_path,
+        device=device,
         default_dtype="float64",
     )
-    return mlcalculator
+    return ml_calculator
 
 
-def calc():
-    use_cuda = torch.cuda.is_available()
-    device = 'cuda' if use_cuda else 'cpu'
-    mlcalculator = MLAseCalculator(
-        model_path=[
-                    os.path.join(
-                        os.path.expanduser("~"),
-                        'Documents/NewtonNet/example/predict/training_52/models/best_model_state.tar'
-                    ),
-                    #'/global/home/users/kumaranu/Documents/NewtonNet/example/predict/training_53/models/best_model_state.tar',
-                    #'/global/home/users/kumaranu/Documents/NewtonNet/example/predict/training_54/models/best_model_state.tar',
-                    #'/global/home/users/kumaranu/Documents/NewtonNet/example/predict/training_55/models/best_model_state.tar',
-                   ],    # path to model file, str or list of str
-        settings_path=[
-                       os.path.join(
-                           os.path.expanduser("~"),
-                           'Documents/NewtonNet/example/predict/training_52/run_scripts/config0.yml'
-                       ),
-                       #'/global/home/users/kumaranu/Documents/NewtonNet/example/predict/training_53/run_scripts/config2.yml',
-                       #'/global/home/users/kumaranu/Documents/NewtonNet/example/predict/training_54/run_scripts/config1.yml',
-                       #'/global/home/users/kumaranu/Documents/NewtonNet/example/predict/training_55/run_scripts/config3.yml',
-                      ],    # path to configuration file, str or list of str
-        hess_method=None,    # method to calculate hessians. 'autograd', 'fwd_diff', 'cnt_diff', or None (default: 'autograd')
-        # hess_precision=1e-5,    # hessian gradient calculation precision for 'fwd_diff' and 'cnt_diff', ignored otherwise (default: None)
-        disagreement='std',    # method to calculate disagreement among models. 'std', 'std_outlierremoval', 'range':, 'values', or None (default: 'std')
+def calc() -> MLAseCalculator:
+    """
+    Initialize and return an MLAseCalculator instance.
+
+    Returns
+    -------
+    MLAseCalculator
+        An instance of the MLAseCalculator initialized with the specified model path, config path, and device.
+    """
+    config = load_config()
+    model_path = config['newtonnet']['model_path']
+    config_path = config['newtonnet']['config_path']
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    ml_calculator = MLAseCalculator(
+        model_path=[model_path],
+        settings_path=[config_path],
+        disagreement='std',
         device=device
     )
-    return mlcalculator
+    return ml_calculator
