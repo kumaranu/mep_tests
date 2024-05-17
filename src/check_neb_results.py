@@ -64,6 +64,7 @@ def process_file(i):
     except Exception as e:
         return f'Error processing file {i}: {str(e)}'
 
+
 if __name__ == '__main__':
 
     logdir = '/global/scratch/users/kumaranu/saved_files/neb_nn_inputs'
