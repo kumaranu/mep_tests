@@ -7,3 +7,6 @@ PyYAML==6.0.1
 geodesic-interpolate @ git+https://github.com/virtualzx-nad/geodesic-interpolate.git
 ase @ git+https://gitlab.com/ase/ase.git
 mace @ https://github.com/ACEsuit/mace.git
+torchvision
+torchaudio
+mace-torch
