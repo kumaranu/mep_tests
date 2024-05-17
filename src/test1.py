@@ -24,12 +24,12 @@ def main(config_file: str) -> None:
         run_neb_method(
             method=input_set['method'],
             optimizer=ase_optimizer,
+            opt_method=None,
             precon=None,
-            optmethod=None,
             logdir=inputs['input_paths']['logdir'],
             xyz_r_p=inputs['input_paths']['xyz_r_p'],
             xyz_ts=inputs['input_paths']['xyz_ts'],
-            N_intermediate=inputs['geodesic_inputs']['N_intermediate'],
+            n_intermediate=inputs['geodesic_inputs']['N_intermediate'],
         )
 
 

@@ -12,7 +12,7 @@ for i in range(265):
             print(f'{i:03}: {INF[-1].split()[1]}')
         else:
             print(f'{i:03}: No NEB file.')
-        os.chdir('../')
+        os.chdir('../../../')
     else:
         print(f'{i:03} does not exist.')
 

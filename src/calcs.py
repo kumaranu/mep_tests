@@ -45,14 +45,3 @@ def calc():
         device=device
     )
     return mlcalculator
-
-'''
-h2 = Atoms(numbers=[1, 1], positions=[[0.0, 0.0, 0.0], [0.0, 0.0, 1.0]])
-mlcalculator.calculate(h2)
-
-print(mlcalculator.results['energy'])    # mean of calculated molecular energies, shape (1,)
-print(mlcalculator.results['forces'])    # mean of calculated atomic forces, shape (n_atom, 3)
-print(mlcalculator.results['hessian'])    # mean of calculated atomic Hessian, shape (n_atom, 3, n_atom, 3)
-print(mlcalculator.results['energy_disagreement'])    # disagreement among calculated molecular 
-'''
-

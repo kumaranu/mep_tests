@@ -5,7 +5,7 @@ from pymatgen.io.ase import AseAtomsAdaptor
 from pymatgen.analysis.graphs import MoleculeGraph
 from pymatgen.analysis.local_env import OpenBabelNN
 from networkx.algorithms.graph_hashing import weisfeiler_lehman_graph_hash
-from plot2 import gen_energy_profile
+from src.mep_tests.tools.plot2 import gen_energy_profile
 
 
 def add_specie_suffix(graph):

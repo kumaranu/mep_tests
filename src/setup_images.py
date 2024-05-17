@@ -1,5 +1,4 @@
 import os
-import copy
 from calcs import calc
 from ase.io import read, write
 from typing import Any, Dict, Iterator, List, Sequence, Tuple, TypeVar, Union
@@ -40,4 +39,3 @@ def setup_images(
     write('geodesic_path.xyz', images)
 
     return images
-

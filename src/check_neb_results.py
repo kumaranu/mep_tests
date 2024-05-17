@@ -1,6 +1,6 @@
 import glob, os, sys
 from ase.io import read
-from calcs1 import calc
+from calcs import calc
 import numpy as np
 from ase import Atoms
 from multiprocessing import Pool
@@ -79,4 +79,3 @@ if __name__ == '__main__':
     for result in results:
         if result is not None:
             print(result)
-

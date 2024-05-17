@@ -80,26 +80,33 @@ if __name__ == '__main__':
     # if len(sys.argv) != 3:
     #     print("Usage: python script.py <xyz_file1> <xyz_file2>")
     #     sys.exit(1)
-    ref_dir = '/home/kumaranu/Downloads/neb_nn_inputs'
-    index = '001'
-    geodesic_xyz = os.path.join(
-        ref_dir,
-        index,
-        'geodesic_path.xyz',
-    )
-    neb_path_xyz = os.path.join(
-        ref_dir,
-        index,
-        'optimized_path_aseneb_NEBOptimizer_None.xyz'
-    )
-    ts_xyz = os.path.join(
-        ref_dir,
-        index,
-        'TS.xyz',
-    )
+    #ref_dir = '/home/kumaranu/Downloads/neb_nn_inputs'
+    #index = '001'
+    ref_dir = '/home/kumaranu/Downloads/neb_rgd1_inputs'
+    for i in range(999):
+        index = f'{i:03}'
+        # index = '679'
+        try:
+            geodesic_xyz = os.path.join(
+                ref_dir,
+                index,
+                'geodesic_path.xyz',
+            )
+            neb_path_xyz = os.path.join(
+                ref_dir,
+                index,
+                'optimized_path_aseneb_NEBOptimizer_None.xyz'
+            )
+            ts_xyz = os.path.join(
+                ref_dir,
+                index,
+                'TS.xyz',
+            )
 
-    barrier_err = gen_energy_profile(
-        geodesic_xyz,
-        neb_path_xyz,
-        ts_xyz,
-    )
+            barrier_err = gen_energy_profile(
+                geodesic_xyz,
+                neb_path_xyz,
+                ts_xyz,
+            )
+        except:
+            continue

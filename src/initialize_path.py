@@ -126,4 +126,3 @@ def setup_analysis(
 
     print(f'Forward_barrier: {ts_e - r_e}')
     print(f'Reverse_barrier: {ts_e - p_e}')
-
