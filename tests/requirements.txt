@@ -10,3 +10,5 @@ mace @ https://github.com/ACEsuit/mace.git
 torchvision
 torchaudio
 mace-torch
+newtonnet @ https://github.com/THGLab/NewtonNet.git
+

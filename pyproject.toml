@@ -36,6 +36,7 @@ dependencies = [
     "pytest",
     "pytest-cov",
     "PyYAML",
+    "newtonnet @ https://github.com/THGLab/NewtonNet.git",
 ]
 
 [project.optional-dependencies]
