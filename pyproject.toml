@@ -28,6 +28,10 @@ requires-python = ">=3.9, <3.13"
 dependencies = [
     "numpy",
     "geodesic-interpolate @ git+https://github.com/virtualzx-nad/geodesic-interpolate.git",
+    "torch",
+    "pytest",
+    "pytest-cov",
+    "PyYAML",
 ]
 
 [project.optional-dependencies]
