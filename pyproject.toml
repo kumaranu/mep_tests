@@ -37,6 +37,9 @@ dependencies = [
     "pytest-cov",
     "PyYAML",
     "newtonnet @ git+https://github.com/THGLab/NewtonNet.git",
+    "sella",
+    "jax",
+    "jaxlib",
 ]
 
 [project.optional-dependencies]
