@@ -29,6 +29,7 @@ dependencies = [
     "numpy",
     "geodesic-interpolate @ git+https://github.com/virtualzx-nad/geodesic-interpolate.git",
     "ase @ git+https://gitlab.com/ase/ase.git",
+    "mace @ https://github.com/ACEsuit/mace.git",
     "torch",
     "pytest",
     "pytest-cov",
