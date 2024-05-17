@@ -35,4 +35,3 @@ def sella_wrapper(
           )
     if traj_file:
         traj.close()
-

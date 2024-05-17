@@ -64,8 +64,3 @@ def setup_images(
     except Exception as e:
         print(f"An error occurred: {e}")
         return []
-
-
-if __name__ == '__main__':
-
-    setup_images()

@@ -1,5 +1,5 @@
 mace:
-  model_path: 'MACE_model.model'
+  model_path: 'tests/MACE_model_cpu.model'
 newtonnet:
   model_path: 'tests/best_model_state.tar'
   config_path: 'tests/config0.yml'
