@@ -1,6 +1,5 @@
 import os
 import pytest
-import shutil
 from ase import Atoms
 from ase.io import write
 from setup_images import setup_images
