@@ -32,7 +32,7 @@ dependencies = [
     "torch",
     "torchvision",
     "torchaudio",
-    "mace-torch @ git+https://github.com/ACEsuit/mace.git",
+    "mace-torch",
     "pytest",
     "pytest-cov",
     "PyYAML",

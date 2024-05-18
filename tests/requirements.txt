@@ -8,7 +8,7 @@ geodesic-interpolate @ git+https://github.com/virtualzx-nad/geodesic-interpolate
 ase @ git+https://gitlab.com/ase/ase.git
 torchvision
 torchaudio
-mace @ git+https://github.com/ACEsuit/mace.git
+mace-torch
 newtonnet @ git+https://github.com/THGLab/NewtonNet.git
 sella==2.3.2
 jax<=0.4.24
