@@ -9,7 +9,11 @@ def test_setup_images(setup_test_environment):
     logdir, xyz_r_p = setup_test_environment
 
     # Call the setup_images function
-    images = setup_images(logdir=str(logdir), xyz_r_p=str(xyz_r_p), n_intermediate=2)
+    images = setup_images(
+        logdir=str(logdir),
+        xyz_r_p=str(xyz_r_p),
+        n_intermediate=2
+    )
 
     # Check that images were returned
     assert len(images) > 0, "No images were generated"

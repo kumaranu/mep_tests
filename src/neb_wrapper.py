@@ -3,7 +3,7 @@ from typing import Optional, List, Union
 from ase.io import write
 from setup_images import setup_images
 from ase.neb import NEB
-from ase.optimize import Optimizer
+from ase.optimize.optimize import Optimizer
 
 
 def run_neb_method(

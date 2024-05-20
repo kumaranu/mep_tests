@@ -2,7 +2,6 @@ import glob, os, sys
 from ase.io import read
 from calcs import calc
 import numpy as np
-from ase import Atoms
 from multiprocessing import Pool
 
 
@@ -43,11 +42,14 @@ def process_file(i):
                 energies = [i.get_potential_energy() for i in ase_traj]
                 ts_index = np.argmax(energies)
                 
-                mlcalculator = calc()
+                ml_calculator = calc()
                 ts_atoms = read('TS.xyz')
-                mlcalculator.calculate(ts_atoms)
-                energy_ts = mlcalculator.results['energy']
-                rmsd, new_geom = align_geom(ase_traj[ts_index].get_positions(), ts_atoms.get_positions())
+                ml_calculator.calculate(ts_atoms)
+                energy_ts = ml_calculator.results['energy']
+                rmsd, new_geom = align_geom(
+                    ase_traj[ts_index].get_positions(),
+                    ts_atoms.get_positions()
+                )
                 
                 fwd_barrier_neb = energies[ts_index] - energies[0]
                 rev_barrier_neb = energies[ts_index] - energies[-1]
