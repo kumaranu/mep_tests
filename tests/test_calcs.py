@@ -3,7 +3,6 @@ from ase.io import read
 from calcs import load_config, calc_mace, calc
 from mace.calculators import MACECalculator
 from newtonnet.utils.ase_interface import MLAseCalculator
-#from conftest import setup_test_environment
 
 
 def test_load_config():
@@ -23,16 +22,35 @@ def test_load_config():
 
 def test_calc_mace(setup_test_environment):
     ml_calculator = calc_mace()
+
     assert isinstance(ml_calculator, MACECalculator)
+
+    logdir, xyz_r_p = setup_test_environment
+    atoms_object = read(xyz_r_p, index=1)
+
+    atoms_object.calc = ml_calculator
+
+    assert atoms_object.get_potential_energy() == pytest.approx(
+        -6217.67384972,
+        abs=1e-5,
+    )
+    "error in energy"
+
+    assert atoms_object.get_forces()[0, 0] == pytest.approx(
+        -1.9892346894,
+        abs=1e-4,
+    )
+    "error in forces"
 
 
 def test_calc(setup_test_environment):
     ml_calculator = calc()
+
     assert isinstance(ml_calculator, MLAseCalculator)
 
     logdir, xyz_r_p = setup_test_environment
-    print('xyz_r_p:', xyz_r_p)
-    atoms_object = read(xyz_r_p)
+    atoms_object = read(xyz_r_p, index=1)
+
     ml_calculator.calculate(atoms_object)
 
     assert ml_calculator.results['energy'] == pytest.approx(
