@@ -33,7 +33,7 @@ nav:
       - example_docs/about/conduct.md
       - example_docs/about/license.md
 
-repo_url: https://github.com/Quantum-Accelerators/mep_tests/
+repo_url: https://github.com/kumaranu/mep_tests/
 edit_uri: blob/main/docs/
 
 theme:
