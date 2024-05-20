@@ -54,9 +54,9 @@ docs = [
 ]
 
 [project.urls]
-repository = "https://github.com/Quantum-Accelerators/mep_tests"
-documentation = "https://quantum-accelerators.github.io/mep_tests/"
-changelog = "https://github.com/Quantum-Accelerators/mep_tests/blob/main/CHANGELOG.md"
+repository = "https://github.com/kumaranu/mep_tests"
+documentation = "https://kumaranu.github.io/mep_tests/"
+changelog = "https://github.com/kumaranu/mep_tests/blob/main/CHANGELOG.md"
 
 [tool.setuptools.package-data]
 mep_tests = ["py.typed"]
