@@ -4,8 +4,6 @@ from ase import Atoms
 from ase.io import read, write
 from sella_wrapper import sella_wrapper
 
-import logging
-import numpy as np
 from geodesic_interpolate.fileio import read_xyz, write_xyz
 from geodesic_interpolate.interpolation import redistribute
 from geodesic_interpolate.geodesic import Geodesic
