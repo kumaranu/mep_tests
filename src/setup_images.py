@@ -1,7 +1,72 @@
 import os
 from calcs import calc
+from ase import Atoms
 from ase.io import read, write
 from sella_wrapper import sella_wrapper
+
+import logging
+import numpy as np
+from geodesic_interpolate.fileio import read_xyz, write_xyz
+from geodesic_interpolate.interpolation import redistribute
+from geodesic_interpolate.geodesic import Geodesic
+
+
+def geodesic_interpolate_wrapper(
+    r_p_atoms: Atoms,
+    nimages: int = 17,
+    sweep: bool = None,
+    output: str = "interpolated.xyz",
+    tol: float = 2e-3,
+    maxiter: int = 15,
+    microiter: int = 20,
+    scaling: float = 1.7,
+    friction: float = 1e-2,
+    dist_cutoff: float = 3,
+    save_raw: str = None):
+    """
+    Interpolates between two geometries and optimizes the path.
+
+    Parameters:
+    filename (str): XYZ file containing geometries.
+    nimages (int): Number of images. Default is 17.
+    sweep (bool): Sweep across the path optimizing one image at a time.
+                  Default is to perform sweeping updates if there are more than 35 atoms.
+    output (str): Output filename. Default is "interpolated.xyz".
+    tol (float): Convergence tolerance. Default is 2e-3.
+    maxiter (int): Maximum number of minimization iterations. Default is 15.
+    microiter (int): Maximum number of micro iterations for sweeping algorithm. Default is 20.
+    scaling (float): Exponential parameter for Morse potential. Default is 1.7.
+    friction (float): Size of friction term used to prevent very large change of geometry. Default is 1e-2.
+    dist_cutoff (float): Cut-off value for the distance between a pair of atoms to be included in the coordinate system. Default is 3.
+    save_raw (str): When specified, save the raw path after bisections but before smoothing. Default is None.
+    """
+    # Read the initial geometries.
+    symbols = r_p_atoms[0].get_chemical_symbols()
+
+    X = [conf.get_positions() for conf in r_p_atoms]
+
+    if len(X) < 2:
+        raise ValueError("Need at least two initial geometries.")
+
+    # First redistribute number of images. Perform interpolation if too few and subsampling if too many images are given
+    raw = redistribute(symbols, X, nimages, tol=tol * 5)
+    if save_raw is not None:
+        write_xyz(save_raw, symbols, raw)
+
+    # Perform smoothing by minimizing distance in Cartesian coordinates with redundant internal metric
+    # to find the appropriate geodesic curve on the hyperspace.
+    smoother = Geodesic(symbols, raw, scaling, threshold=dist_cutoff, friction=friction)
+    if sweep is None:
+        sweep = len(symbols) > 35
+    try:
+        if sweep:
+            smoother.sweep(tol=tol, max_iter=maxiter, micro_iter=microiter)
+        else:
+            smoother.smooth(tol=tol, max_iter=maxiter)
+    finally:
+        # Save the smoothed path to output file. try block is to ensure output is saved if one ^C the process, or there is an error
+        write_xyz(output, symbols, smoother.path)
+    return symbols, smoother.path
 
 
 def setup_images(
@@ -39,9 +104,9 @@ def setup_images(
         write(r_p_path, [reactant.copy(), product.copy()])
 
         # Generate intermediate images using geodesic interpolation
-        output_xyz = os.path.join(logdir, 'output.xyz')
-        os.system(f'geodesic_interpolate {r_p_path} --output {output_xyz} --nimages {n_intermediate}')
-        images = read(output_xyz, index=':')
+        symbols, smoother_path =\
+            geodesic_interpolate_wrapper([reactant.copy(), product.copy()])
+        images = [Atoms(symbols=symbols, positions=conf) for conf in smoother_path]
 
         # Calculate energies and forces for each intermediate image
         for image in images:

@@ -35,7 +35,12 @@ def run_neb_method(
         max_steps (int, optional): maximum number of optimization steps allowed. Defaults to 1000.
         fmax_cutoff (float: optional): convergence cut-off criteria for the NEB optimization. Defaults to 1e-2.
     """
-    images = setup_images(logdir, xyz_r_p, xyz_ts, n_intermediate)
+    images = setup_images(
+        logdir,
+        xyz_r_p,
+        xyz_ts,
+        n_intermediate=n_intermediate,
+    )
     
     mep = NEB(
         images,
