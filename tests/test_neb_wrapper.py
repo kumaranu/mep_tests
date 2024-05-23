@@ -88,7 +88,8 @@ def test_run_neb_method(tmp_path, setup_test_environment):
 
     assert os.path.exists(
         logdir / f"neb_band_{method}_{optimizer.__name__}_{precon}.txt"
-    ), 'Error in the optimization output file for NEB'
-    # assert os.path.exists(
-    # logdir / f"optimized_path_{method}_{optimizer.__name__}_{precon}.xyz"),
-    # 'bb'
+    ), 'Could not find the optimization output file for NEB'
+
+    assert os.path.exists(
+        f'{logdir}/optimized_path_{method}_{optimizer.__name__}_{precon}.xyz',
+    ), "Could not find the xyz file for converged NEB calculation."
