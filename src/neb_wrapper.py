@@ -1,5 +1,6 @@
 import os
 from typing import Optional, List, Union
+from ase import Atoms
 from ase.io import write
 from setup_images import setup_images
 from ase.neb import NEB
@@ -13,7 +14,6 @@ def run_neb_method(
         precon: Optional[str] = None,
         logdir: Optional[str] = None,
         xyz_r_p: Optional[str] = None,
-        xyz_ts: Optional[str] = None,
         n_intermediate: Optional[int] = 20,
         k: Optional[float] = 0.1,
         max_steps: Optional[int] = 1000,
@@ -29,7 +29,6 @@ def run_neb_method(
         opt_method (str, Optimizer): Optimization method. Defaults to None.
         logdir (str, optional): Directory to save logs. Defaults to None.
         xyz_r_p (str, optional): Path to reactant and product XYZ files. Defaults to None.
-        xyz_ts (str, optional): Path to transition state XYZ file. Defaults to None.
         n_intermediate (int, optional): Number of intermediate images. Defaults to 20.
         k (float, optional): force constant for the springs in NEB. Defaults to 0.1.
         max_steps (int, optional): maximum number of optimization steps allowed. Defaults to 1000.
@@ -38,7 +37,6 @@ def run_neb_method(
     images = setup_images(
         logdir,
         xyz_r_p,
-        xyz_ts,
         n_intermediate=n_intermediate,
     )
     
@@ -64,4 +62,15 @@ def run_neb_method(
 
     opt.run(fmax=fmax_cutoff, steps=max_steps)
 
-    write(f'{logdir}/optimized_path_{method}_{optimizer.__name__}_{precon}.xyz', images)
+    # The following was written because of some error in writing the xyz file below
+    images_copy = []
+    for image in images:
+        image_copy = Atoms(
+            symbols=image.symbols,
+            positions=image.positions,
+        )
+        image_copy.info['energy'] = image.get_potential_energy()
+        images_copy.append(image_copy)
+
+    write(f'{logdir}/optimized_path_{method}_{optimizer.__name__}_{precon}.xyz', images_copy)
+    return images

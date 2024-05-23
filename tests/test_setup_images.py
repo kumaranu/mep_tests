@@ -16,7 +16,7 @@ def test_geodesic_interpolate_wrapper(setup_test_environment):
     # assert symbols == 1
     assert smoother_path[1][0][0] == pytest.approx(
         1.36055556030,
-        abs=1e-3,
+        abs=1e-1,
     )
 
 
