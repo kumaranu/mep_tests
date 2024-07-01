@@ -11,5 +11,5 @@ torchaudio
 mace-torch
 newtonnet @ git+https://github.com/THGLab/NewtonNet.git
 sella==2.3.4
-jax<=0.4.24
+jax<=0.4.30
 jaxlib<=0.4.24
